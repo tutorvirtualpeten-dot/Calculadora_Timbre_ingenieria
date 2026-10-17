@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora del Timbre de Ingeniería - CIG Guatemala</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    @media print {
+      .no-print { display: none !important; }
+      body { background-color: white !important; color: black !important; }
+      .print-card { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between">
+  <!-- Encabezado -->
+  <header class="bg-blue-900 text-white shadow-md">
+    <div class="max-w-5xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="bg-amber-400 text-blue-950 p-2.5 rounded-xl shadow-sm">
+          <i data-lucide="compass" class="w-7 h-7"></i>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Calculadora de Timbre de Ingeniería</h1>
+          <p class="text-xs sm:text-sm text-blue-200">Colegio de Ingenieros de Guatemala (CIG) • Decreto 22-75 y Decreto Ley 138-85</p>
+        </div>
+      </div>
+      <div class="no-print flex items-center gap-2">
+        <button onclick="window.print()" class="flex items-center gap-1.5 bg-blue-800 hover:bg-blue-700 text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-lg transition border border-blue-700">
+          <i data-lucide="printer" class="w-4 h-4"></i>
+          Imprimir / PDF
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido -->
+  <main class="max-w-5xl w-full mx-auto px-4 py-8 flex-grow">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Formulario -->
+      <section class="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 print-card">
+        <h2 class="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <i data-lucide="sliders" class="w-5 h-5 text-blue-700"></i>
+          Parámetros del Documento
+        </h2>
+
+        <div class="mb-5">
+          <label for="montoInput" class="block text-sm font-medium text-slate-700 mb-1.5">
+            Monto del Documento / Contrato (Q)
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 font-semibold">Q</span>
+            <input
+              type="number"
+              id="montoInput"
+              value="25000"
+              min="0"
+              step="0.01"
+              placeholder="0.00"
+              class="w-full pl-9 pr-4 py-2.5 text-lg font-semibold text-slate-900 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 focus:bg-white transition outline-none"
+            />
+          </div>
+
+          <div class="no-print mt-2.5 flex flex-wrap gap-1.5">
+            <span class="text-xs text-slate-400 self-center mr-1">Rápido:</span>
+            <button type="button" onclick="setQuickAmount(5000)" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 font-medium px-2.5 py-1 rounded-md border border-slate-200 transition">Q5,000</button>
+            <button type="button" onclick="setQuickAmount(18000)" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 font-medium px-2.5 py-1 rounded-md border border-slate-200 transition">Q18,000</button>
+            <button type="button" onclick="setQuickAmount(25000)" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 font-medium px-2.5 py-1 rounded-md border border-slate-200 transition">Q25,000</button>
+            <button type="button" onclick="setQuickAmount(90000)" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 font-medium px-2.5 py-1 rounded-md border border-slate-200 transition">Q90,000</button>
+          </div>
+        </div>
+
+        <div class="mb-5">
+          <label for="incisoSelect" class="block text-sm font-medium text-slate-700 mb-1.5">
+            Concepto según Art. 3 (Decreto 22-75)
+          </label>
+          <select
+            id="incisoSelect"
+            class="w-full px-3.5 py-2.5 text-sm font-medium text-slate-800 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-blue-600 focus:bg-white transition outline-none"
+          >
+            <option value="inciso_a">Inciso a) Honorarios Profesionales / Facturas (5‰ - 0.5%)</option>
+            <option value="inciso_b">Inciso b) Licencias de Construcción o Instalación (1‰ - 0.1%)</option>
+            <option value="inciso_c">Inciso c) Contratos de Obra y Servicios (1‰ - 0.1%)</option>
+            <option value="inciso_d">Inciso d) Sueldos Mensuales en Nómina/Recibo (2‰ - 0.2%)</option>
+          </select>
+          <p id="incisoDesc" class="mt-2 text-xs text-slate-500 bg-slate-50 p-2.5 rounded-lg border border-slate-200 leading-relaxed">
+            Proyectos, peritajes, avalúos, asesorías, consultorías, supervisión de obra o cualquier servicio profesional facturado.
+          </p>
+        </div>
+
+        <div id="ivaContainer" class="p-3.5 bg-blue-50/70 border border-blue-200 rounded-xl flex items-center justify-between">
+          <div class="pr-3">
+            <label for="incluyeIvaToggle" class="text-sm font-semibold text-slate-800 cursor-pointer block">
+              ¿El monto incluye IVA (12%)?
+            </label>
+            <span id="ivaHelpText" class="text-xs text-slate-500">
+              Divide entre 1.12 para calcular sobre el valor neto sin IVA.
+            </span>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer shrink-0">
+            <input type="checkbox" id="incluyeIvaToggle" class="sr-only peer" checked>
+            <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-700"></div>
+          </label>
+        </div>
+
+        <div class="mt-5 pt-4 border-t border-slate-100 text-xs text-slate-500 space-y-1">
+          <div class="flex items-center justify-between">
+            <span>Tasa aplicada:</span>
+            <span id="tasaBadge" class="font-semibold text-blue-800 bg-blue-100 px-2 py-0.5 rounded">5 por millar (0.5%)</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Mínimo legal del inciso:</span>
+            <span id="minimoLegalLabel" class="font-medium text-slate-700">Q 0.25 (Estampilla mín. Q 1.00)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Resultados -->
+      <section class="lg:col-span-7 flex flex-col gap-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 print-card">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-base font-semibold text-slate-800 flex items-center gap-2">
+              <i data-lucide="calculator" class="w-5 h-5 text-blue-700"></i>
+              Liquidación del Timbre
+            </h2>
+            <button
+              id="copyBtn"
+              onclick="copiarResumen()"
+              class="no-print flex items-center gap-1.5 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg border border-blue-200 transition"
+            >
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copiar resumen</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <span class="text-xs font-medium text-slate-500 uppercase tracking-wider block">Base Imponible (Sin IVA)</span>
+              <div id="baseSinIvaDisplay" class="text-xl font-bold text-slate-800 mt-1">Q 22,321.43</div>
+              <span id="ivaDescontadoDisplay" class="text-xs text-slate-400 mt-0.5 block">IVA: Q 2,678.57</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <span class="text-xs font-medium text-slate-500 uppercase tracking-wider block">Cálculo Exacto</span>
+              <div id="timbreExactoDisplay" class="text-xl font-bold text-slate-800 mt-1">Q 111.61</div>
+              <span id="formulaAplicadaDisplay" class="text-xs text-slate-400 mt-0.5 block">Base × 0.005</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-amber-50 border-2 border-amber-300">
+              <span class="text-xs font-bold text-amber-900 uppercase tracking-wider block">Total a Adherir (CIG)</span>
+              <div id="timbreRedondeadoDisplay" class="text-2xl font-extrabold text-blue-950 mt-0.5">Q 112.00</div>
+              <span class="text-xs text-amber-800 font-medium mt-0.5 block">Entero inmediato superior</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estampillas -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex-grow print-card">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 class="text-base font-semibold text-slate-800 flex items-center gap-2">
+                <i data-lucide="ticket" class="w-5 h-5 text-amber-600"></i>
+                Combinación Óptima de Estampillas Físicas
+              </h3>
+              <p class="text-xs text-slate-500">
+                Denominaciones CIG: Q1, Q5, Q10, Q20, Q50, Q100, Q200 y Q500
+              </p>
+            </div>
+            <span id="totalEstampillasCount" class="text-xs font-semibold bg-slate-100 text-slate-700 px-3 py-1 rounded-full self-start sm:self-center">
+              3 estampillas en total
+            </span>
+          </div>
+
+          <div id="stampGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3"></div>
+
+          <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+            <span>Denominaciones CIG:</span>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-medium">Q1</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-medium">Q5</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-medium">Q10</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-medium">Q20</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-medium">Q50</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-medium">Q100</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-medium">Q200</span>
+              <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-medium">Q500</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Tabla Legal -->
+    <section class="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 print-card">
+      <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
+        <i data-lucide="scale" class="w-4 h-4 text-blue-700"></i>
+        Resumen Normativo (Art. 3 Decreto 22-75 / Reformado por Decreto Ley 138-85)
+      </h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead>
+            <tr class="border-b border-slate-200 text-slate-500">
+              <th class="py-2.5 pr-4 font-semibold">Inciso</th>
+              <th class="py-2.5 px-4 font-semibold">Aplicación</th>
+              <th class="py-2.5 px-4 font-semibold">Tasa</th>
+              <th class="py-2.5 pl-4 font-semibold">Mínimo Legal</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-slate-700">
+            <tr>
+              <td class="py-2.5 pr-4 font-semibold text-blue-900 whitespace-nowrap">Inciso a)</td>
+              <td class="py-2.5 px-4">Honorarios por proyectos, peritajes, avalúos, asesorías, consultorías y supervisión.</td>
+              <td class="py-2.5 px-4 font-medium whitespace-nowrap">5 por millar (0.5%)</td>
+              <td class="py-2.5 pl-4 whitespace-nowrap">Q 0.25 (Estampilla Q1.00)</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 pr-4 font-semibold text-blue-900 whitespace-nowrap">Inciso b)</td>
+              <td class="py-2.5 px-4">Valor que conste en licencias municipales de construcción o instalación.</td>
+              <td class="py-2.5 px-4 font-medium whitespace-nowrap">1 por millar (0.1%)</td>
+              <td class="py-2.5 pl-4 whitespace-nowrap">Q 0.25 (Estampilla Q1.00)</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 pr-4 font-semibold text-blue-900 whitespace-nowrap">Inciso c)</td>
+              <td class="py-2.5 px-4">Contratos de obra, supervisión o consultoría con el Estado o sector privado.</td>
+              <td class="py-2.5 px-4 font-medium whitespace-nowrap">1 por millar (0.1%)</td>
+              <td class="py-2.5 pl-4 whitespace-nowrap">Q 0.25 (Estampilla Q1.00)</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 pr-4 font-semibold text-blue-900 whitespace-nowrap">Inciso d)</td>
+              <td class="py-2.5 px-4">Sueldos o remuneraciones mensuales percibidas por profesionales de la ingeniería.</td>
+              <td class="py-2.5 px-4 font-medium whitespace-nowrap">2 por millar (0.2%)</td>
+              <td class="py-2.5 pl-4 whitespace-nowrap">Q 1.00 mensual</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 mt-10 py-4 text-center text-xs text-slate-500">
+    <div class="max-w-5xl mx-auto px-4">
+      Herramienta de cálculo referencial basada en la Ley de Creación del Timbre de Ingeniería de Guatemala.
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    const INCISOS_CONFIG = {
+      inciso_a: {
+        nombre: "Inciso a) Honorarios Profesionales",
+        tasa: 0.005,
+        tasaTexto: "5 por millar (0.5%)",
+        minimoLegal: 0.25,
+        minimoTexto: "Q 0.25 (Estampilla mín. Q 1.00)",
+        aplicaIva: true,
+        descripcion: "Proyectos, peritajes, avalúos, asesorías, consultorías, supervisión de obra o cualquier servicio profesional facturado."
+      },
+      inciso_b: {
+        nombre: "Inciso b) Licencias de Construcción",
+        tasa: 0.001,
+        tasaTexto: "1 por millar (0.1%)",
+        minimoLegal: 0.25,
+        minimoTexto: "Q 0.25 (Estampilla mín. Q 1.00)",
+        aplicaIva: false,
+        descripcion: "Construcciones o instalaciones realizadas por empresas individuales o jurídicas que requieran licencia municipal u otra licencia."
+      },
+      inciso_c: {
+        nombre: "Inciso c) Contratos de Obra y Servicios",
+        tasa: 0.001,
+        tasaTexto: "1 por millar (0.1%)",
+        minimoLegal: 0.25,
+        minimoTexto: "Q 0.25 (Estampilla mín. Q 1.00)",
+        aplicaIva: true,
+        descripcion: "Contratos de construcción, supervisión o consultoría celebrados con el Estado, municipalidades, entidades autónomas o sector privado."
+      },
+      inciso_d: {
+        nombre: "Inciso d) Sueldos Mensuales",
+        tasa: 0.002,
+        tasaTexto: "2 por millar (0.2%)",
+        minimoLegal: 1.00,
+        minimoTexto: "Q 1.00 mensual",
+        aplicaIva: false,
+        descripcion: "Remuneración mensual en relación de dependencia (pública o privada). Los sueldos están exentos de IVA."
+      }
+    };
+
+    const DENOMINACIONES_CIG = [
+      { valor: 500, bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-900", badge: "bg-purple-700" },
+      { valor: 200, bg: "bg-indigo-50", border: "border-indigo-300", text: "text-indigo-900", badge: "bg-indigo-700" },
+      { valor: 100, bg: "bg-blue-50",   border: "border-blue-300",   text: "text-blue-900",   badge: "bg-blue-700" },
+      { valor: 50,  bg: "bg-emerald-50",border: "border-emerald-300",text: "text-emerald-900",badge: "bg-emerald-700" },
+      { valor: 20,  bg: "bg-teal-50",   border: "border-teal-300",   text: "text-teal-900",   badge: "bg-teal-700" },
+      { valor: 10,  bg: "bg-amber-50",  border: "border-amber-300",  text: "text-amber-900",  badge: "bg-amber-600" },
+      { valor: 5,   bg: "bg-orange-50", border: "border-orange-300", text: "text-orange-900", badge: "bg-orange-600" },
+      { valor: 1,   bg: "bg-rose-50",   border: "border-rose-300",   text: "text-rose-900",   badge: "bg-rose-600" }
+    ];
+
+    const montoInput = document.getElementById("montoInput");
+    const incisoSelect = document.getElementById("incisoSelect");
+    const incluyeIvaToggle = document.getElementById("incluyeIvaToggle");
+    const ivaContainer = document.getElementById("ivaContainer");
+    const ivaHelpText = document.getElementById("ivaHelpText");
+    const incisoDesc = document.getElementById("incisoDesc");
+    const tasaBadge = document.getElementById("tasaBadge");
+    const minimoLegalLabel = document.getElementById("minimoLegalLabel");
+    const baseSinIvaDisplay = document.getElementById("baseSinIvaDisplay");
+    const ivaDescontadoDisplay = document.getElementById("ivaDescontadoDisplay");
+    const timbreExactoDisplay = document.getElementById("timbreExactoDisplay");
+    const formulaAplicadaDisplay = document.getElementById("formulaAplicadaDisplay");
+    const timbreRedondeadoDisplay = document.getElementById("timbreRedondeadoDisplay");
+    const totalEstampillasCount = document.getElementById("totalEstampillasCount");
+    const stampGrid = document.getElementById("stampGrid");
+
+    function formatQuetzales(valor) {
+      return "Q " + valor.toLocaleString("es-GT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function setQuickAmount(monto) {
+      montoInput.value = monto;
+      calcularTimbre();
+    }
+
+    function handleIncisoChange() {
+      const incisoKey = incisoSelect.value;
+      const config = INCISOS_CONFIG[incisoKey];
+
+      if (incisoKey === "inciso_d") {
+        incluyeIvaToggle.checked = false;
+        incluyeIvaToggle.disabled = true;
+        ivaContainer.classList.add("opacity-60");
+        ivaHelpText.textContent = "No aplica IVA sobre sueldos mensuales.";
+      } else {
+        incluyeIvaToggle.disabled = false;
+        ivaContainer.classList.remove("opacity-60");
+        incluyeIvaToggle.checked = config.aplicaIva;
+        ivaHelpText.textContent = "Divide entre 1.12 para calcular sobre el valor neto sin IVA.";
+      }
+
+      calcularTimbre();
+    }
+
+    function calcularTimbre() {
+      const montoBruto = parseFloat(montoInput.value) || 0;
+      const incisoKey = incisoSelect.value;
+      const config = INCISOS_CONFIG[incisoKey];
+      const descontarIva = incluyeIvaToggle.checked && incisoKey !== "inciso_d";
+
+      incisoDesc.textContent = config.descripcion;
+      tasaBadge.textContent = config.tasaTexto;
+      minimoLegalLabel.textContent = config.minimoTexto;
+
+      if (montoBruto <= 0) {
+        baseSinIvaDisplay.textContent = "Q 0.00";
+        ivaDescontadoDisplay.textContent = "IVA: Q 0.00";
+        timbreExactoDisplay.textContent = "Q 0.00";
+        timbreRedondeadoDisplay.textContent = "Q 0.00";
+        totalEstampillasCount.textContent = "0 estampillas";
+        stampGrid.innerHTML = '<div class="col-span-full text-center py-6 text-slate-400 text-sm">Ingresa un monto mayor a Q 0.00 para calcular las estampillas necesarias.</div>';
+        return;
+      }
+
+      const baseImponible = descontarIva ? (montoBruto / 1.12) : montoBruto;
+      const montoIva = descontarIva ? (montoBruto - baseImponible) : 0;
+      const calculoMatematico = baseImponible * config.tasa;
+      const timbreExacto = Math.max(calculoMatematico, config.minimoLegal);
+      const timbreRedondeado = Math.max(1, Math.ceil(Number(timbreExacto.toFixed(4))));
+
+      baseSinIvaDisplay.textContent = formatQuetzales(baseImponible);
+      ivaDescontadoDisplay.textContent = descontarIva ? `IVA descontado: ${formatQuetzales(montoIva)}` : "Monto neto (Sin descuento de IVA)";
+      timbreExactoDisplay.textContent = formatQuetzales(timbreExacto);
+      formulaAplicadaDisplay.textContent = calculoMatematico < config.minimoLegal ? `Mínimo legal aplicado (${formatQuetzales(config.minimoLegal)})` : `${formatQuetzales(baseImponible)} × ${config.tasa}`;
+      timbreRedondeadoDisplay.textContent = formatQuetzales(timbreRedondeado);
+
+      let restante = timbreRedondeado;
+      let totalPiezas = 0;
+      const desglose = [];
+
+      for (const denom of DENOMINACIONES_CIG) {
+        if (restante >= denom.valor) {
+          const cantidad = Math.floor(restante / denom.valor);
+          restante = restante % denom.valor;
+          totalPiezas += cantidad;
+          desglose.push({ ...denom, cantidad });
+        }
+      }
+
+      totalEstampillasCount.textContent = `${totalPiezas} ${totalPiezas === 1 ? "estampilla" : "estampillas"} en total`;
+
+      stampGrid.innerHTML = desglose.map(item => `
+        <div class="relative p-3.5 rounded-xl border-2 border-dashed ${item.bg} ${item.border} flex flex-col justify-between shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider opacity-75 ${item.text}">Timbre CIG</span>
+            <span class="text-xs font-extrabold text-white px-2 py-0.5 rounded-full ${item.badge}">× ${item.cantidad}</span>
+          </div>
+          <div class="my-2 text-2xl font-black ${item.text}">Q ${item.valor}</div>
+          <div class="text-xs font-medium opacity-80 ${item.text} border-t border-current/10 pt-1.5 flex justify-between">
+            <span>Subtotal:</span>
+            <span class="font-bold">Q ${(item.valor * item.cantidad).toLocaleString("es-GT")}</span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function copiarResumen() {
+      const montoBruto = parseFloat(montoInput.value) || 0;
+      const incisoKey = incisoSelect.value;
+      const config = INCISOS_CONFIG[incisoKey];
+      const textoBase = baseSinIvaDisplay.textContent;
+      const textoExacto = timbreExactoDisplay.textContent;
+      const textoRedondeado = timbreRedondeadoDisplay.textContent;
+
+      const tarjetas = Array.from(stampGrid.querySelectorAll("div.relative"));
+      const detalleEstampillas = tarjetas.map(card => {
+        const denom = card.querySelector(".text-2xl").textContent.trim();
+        const cant = card.querySelector(".rounded-full").textContent.replace("×", "").trim();
+        return `${cant} de ${denom}`;
+      }).join(", ");
+
+      const resumen = [
+        "=== LIQUIDACIÓN DE TIMBRE DE INGENIERÍA (CIG) ===",
+        `Concepto: ${config.nombre} (${config.tasaTexto})`,
+        `Monto ingresado: ${formatQuetzales(montoBruto)}`,
+        `Base imponible (Sin IVA): ${textoBase}`,
+        `Cálculo exacto: ${textoExacto}`,
+        `Total a adherir en estampillas: ${textoRedondeado}`,
+        `Desglose sugerido: ${detalleEstampillas || "N/A"}`
+      ].join("\n");
+
+      navigator.clipboard.writeText(resumen).then(() => {
+        const copyBtn = document.getElementById("copyBtn");
+        const originalHTML = copyBtn.innerHTML;
+        copyBtn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span class="text-emerald-700">¡Copiado!</span>`;
+        lucide.createIcons();
+        setTimeout(() => { copyBtn.innerHTML = originalHTML; lucide.createIcons(); }, 2000);
+      });
+    }
+
+    montoInput.addEventListener("input", calcularTimbre);
+    incisoSelect.addEventListener("change", handleIncisoChange);
+    incluyeIvaToggle.addEventListener("change", calcularTimbre);
+
+    calcularTimbre();
+  </script>
+</body>
+</html>
